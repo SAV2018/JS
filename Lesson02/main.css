@@ -1,0 +1,155 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-size: 100.01%;
+  background-color: transparent;
+  outline: 0 none !important;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  font: 80% Verdana, Arial, sans-serif;
+  min-height: 100%;
+  height: auto !important;  
+  height: 100%;
+  margin: 1px;
+}
+
+a {
+  outline: 0 none !important;
+  cursor: pointer;
+}
+
+p {
+  text-align: justify;
+  margin: 5px 0;
+  line-height: 1.25em;
+}
+
+strong {
+  letter-spacing: 0.01em;
+  font-weight: bold;
+}
+
+img { border: 0 none; }
+
+fieldset {
+  padding: 10px 25px 20px;
+  border: 1px solid #A0ACC0;
+}
+
+legend {
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  margin-bottom: 5px;
+}
+
+select, input, textarea {
+  padding: 1px;
+  font-size: 1em;
+  color: #7A899F;
+  border: solid 1px #7A899F;
+  background-color: white;
+  font-family: Verdana, Arial, sans-serif; 
+}
+
+h1, h2, h3, h4 {
+  color: #000;
+  text-indent: 0;
+}
+
+h1 {
+  font-size: 2em;
+  font-weight: bold;
+  margin: 5px 10px;
+  word-spacing: 0.2em;
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+table {
+  table-layout: fixed;
+}
+td, th {
+  vertical-align: baseline ; 
+  padding: 1px;
+}
+
+ul, ol {
+  margin-left: 20px;
+  padding: 0;
+  line-height: 1.5em;
+  margin: 0 auto 0 35px;
+}
+
+span.initial {
+  color: #f00;  
+}
+
+button {
+  cursor: pointer;
+  text-align: center;
+  border: none;
+  font-weight: bold;
+}
+
+div.top-menu {
+  font-size: 16px;
+  padding: 3px 0 3px 10px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #000;
+}
+
+div.top-menu a {
+  margin: 0 15px 0 0;
+  color: #fff;
+  text-decoration: none;
+}
+
+div.top-menu a:hover {
+  color: #ff0;
+}
+
+button.cart-button {
+  color: #fff;
+  padding: 3px 10px 3px;
+  font-size: 16px;
+  background-color: #f00;
+  float: right;
+}
+button.cart-button:hover { 
+  color: #ff0;
+}
+
+div.good-list {
+  margin: 5px 10px;
+}
+
+div.good-item {
+  display: inline-block;
+  margin: 5px 10px 5px 0;
+  padding: 10px;
+  background-color: #eee;
+  border: 1px solid #ccc;
+}
+
+div.footer {
+  font-size: 14px;
+  padding: 2px 0;
+  color: #fff;
+  text-align: center;
+  clear: both;
+  background-color: #000;
+}
+
+button.add-button {
+  margin-top: 3px;
+  border-radius: 10px;
+  padding: 2px 10px;
+  border: 1px solid #0f0;
+  background-color: #eee;
+  float: right;
+}
