@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" type="text/css" href="normalize.css"/>
+        <link rel="stylesheet" type="text/css" href="main.css"/>
+        <title>Гамбургомер</title>
+        
+        <style>
+            .dv { border: 1px solid #aaa; padding: 10px; margin:10px }
+            .okb { margin:5px 10px; padding:5px; border:1px solid #aaa }
+            #result { color: #0a0; white-space:pre-wrap }
+        </style>
+    </head>
+
+    
+    <body>
+        <header>
+            <h1>Гамбургомер</h1>                   
+        </header>
+        
+        <main>
+            <a href="index.html" style="margin:10px">Назад</a>
+            <form>
+                <div class="dv">
+                    Размер гамбургера:<br />
+                    <input id="small" name="size" type="radio" value="0" checked> маленький - 50 руб. (20 калорий)<br />
+                    <input id="big" name="size" type="radio" value="1"> большой - 100 руб. (40 калорий)
+                </div>
+                <div class="dv">
+                    Начинка:<br />
+                    <input type="checkbox" id="0" value="0" checked> c сыром - +10 руб. (20 калорий).<br />
+                    <input type="checkbox" id="1" value="1"> c салатом - +20 руб. (5 калорий)<br />
+                    <input type="checkbox" id="2" value="2"> c картофелем - +15 руб. (10 калорий)
+                </div>
+                <div class="dv">
+                    Дополнительные ингридиенты:<br />
+                    <input type="checkbox" id="3" value="3" checked> с приправой - +15 руб. (0 калорий)<br />
+                    <input type="checkbox" id="4" value="4"> с майонезом - +20 руб. (5 калорий)
+                </div>
+                <button id="start" onclick="calculate(); return false;" class="okb">Расcчитать</button> 
+            </form>
+            <div class='dv' id='result'></div>
+        </main>
+        
+        <script src="ham.js"></script>
+    </body>
+</html>

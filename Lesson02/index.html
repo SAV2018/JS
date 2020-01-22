@@ -13,8 +13,8 @@
     <body>
         <header>
             <h1><span class="initial">J</span>Shop</h1>
-            <button class="cart-button">Корзина</button>
-            <div class="top-menu"><a>Товары</a> <a>Пункт2</a> <a>...</a></div>            
+            <button id="cart-button" onclick="cart.viewCart()" title="0 ₽">Корзина (0)</button>
+            <div class="top-menu"><a>Товары</a> <a href="ham.html">Гамбургомер*</a> <a>...</a></div>            
         </header>
         
         <main>
@@ -22,6 +22,7 @@
         </main>
         
         <div class="footer">&copy; 2020 SAV</div>
+        <div id="msg-line"></div>
         <script src="main.js"></script>
     </body>
 </html>
