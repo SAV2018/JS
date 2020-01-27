@@ -17,7 +17,7 @@ const stufs = [
                 {id: 3, name: 'с приправой', price: 15, calories: 0, checked: false},
                 {id: 4, name: 'с майонезом', price: 20, calories: 5, checked: false}, 
             ];
-    
+
 class Hamburger {
     constructor(size) {
         this.size = size;
@@ -25,7 +25,7 @@ class Hamburger {
         this.price = hams[size].price;
         this.stuffing = [];
     }
-    
+
     getName() {
         let name = `${(this.size == 0 ? 'Маленький' : 'Большой')} гамбургер `;
         let stuffing = '';   
@@ -38,7 +38,7 @@ class Hamburger {
     addStuffing(id) { // добавить начинку или дополн. ингридиент
         this.stuffing.push(id)
     }
-      
+
     calculatePrice() { // получить цену
         let sum = hams[size].price;
         
