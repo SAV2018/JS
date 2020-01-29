@@ -56,6 +56,9 @@ button {
   font-weight: bold;
   outline: none;
 }
+fieldset {
+  border: none;
+}
 
 div.top-menu {
   font-size: 16px;
@@ -70,9 +73,11 @@ div.top-menu a {
   color: #fff;
   text-decoration: none;
 }
-
 div.top-menu a:hover {
   color: #ff0;
+}
+div.top-menu a:active {
+  color: #dd0;
 }
 
 button#cart-button {
@@ -167,8 +172,7 @@ button.add-button:hover {
   background-color: #0a0;
 }
 button.add-button:active {
-  box-shadow: inset 0 0 0px 0 rgba(0,0,0,.8), inset rgba(0,0,0,.3) 5px 5px 5px 5px,
-  inset rgba(255,255,255,.5) 5px 5px 5px 5px, 1px 1px 1px rgba(255,255,255,.2);
+  background-color: #080;
 }
 
 div#msg-line {
@@ -181,4 +185,48 @@ div#msg-line {
 div.cart-cost {
   font-weight: bold;
   margin: 5px 0;
+}
+
+div.search-container {
+  display: inline-block;
+  float: right;
+  margin: 0 20px;
+}
+
+input#search-pattern {
+  background-color: #fff;
+  border: 1px solid #aaa;
+  margin: 2px 5px;
+  min-height: 18px;
+  font-size: 14px;
+}
+
+button#search-button, #send-button {
+  color: #fff;
+  font-size: 13px;
+  margin: 1px 5px;
+  vertical-align: text-top;
+  border-radius: 10px;
+  padding: 1px 15px;
+  border: 2px solid #555;
+  background-color: #000;
+  font-weight: bold;
+}
+button#search-button:hover {
+  border-color: #fff;
+}
+button#search-button:active {
+  background-color: #555;
+}
+
+button#send-button {
+  background-color: #000;
+  border-color: #000;
+}
+button#send-button:hover {
+  color: #ff0;
+}
+button#send-button:active {
+  background-color: #333;
+  border-color: #333;
 }

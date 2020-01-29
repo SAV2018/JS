@@ -1,3 +1,15 @@
+function replaceQuotes() {
+/*  Дан большой текст, в котором для оформления прямой речи используются
+    одинарные кавычки. Придумать шаблон, который заменяет одинарные кавычки
+    на двойные так, чтобы в конструкциях типа aren't одинарная кавычка не
+    заменялась на двойную. */
+
+    const s1 = "'In vino veritas.' Д'Артаньян сказал: 'А пошли вы все на!..'\nВсе ответили: 'Да пошёл ты сам!' И всё стало о'k.\n'Don't stop it!'";
+    const s2 = s1.replace(/(?<![a-zA-Z0-9А-Яа-яЁё])'.*?/g, '"');
+    alert(s1 + '\n\n' + s2);
+}
+//------------------------------------------------------------------------------
+
 const API_URL = "https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses";
 
 function makeXMLHttpRequest(url, callback) {
@@ -97,6 +109,23 @@ class GoodsList {
     constructor(container) {
         this.container = document.querySelector(container);        
         this.goods = [];
+        this.filteredGoods = [];
+        
+        const searchForm = document.getElementById('search-form');
+
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const pattern = document.getElementById('search-pattern').value.trim();
+            if (pattern !== '') this.filterGoods(pattern);                
+        });
+    }
+        
+    filterGoods(pattern) {
+        const rex = new RegExp(pattern, 'i');
+        this.filteredGoods = this.goods.filter((good) => {
+            return rex.test(good.product_name, pattern);                                  
+        });
+        this.render();
     }
     
     fetchGoods() {
@@ -115,6 +144,7 @@ class GoodsList {
             { id_product: 123, product_name: "Ноутбук", price: 45600 },
             { id_product: 456, product_name: "Мышка", price: 1000 },
         ];
+        this.filteredGoods = [...this.goods];
     }
     
     fetchGood(id) {
@@ -123,10 +153,14 @@ class GoodsList {
     
     render() {
         let goodsList = '';
-        this.goods.forEach(good => {
-            const goodsItem = new GoodsItem(good.id_product, good.product_name, good.price, good.img);
-            goodsList += goodsItem.render();
-        });
+        if (this.filteredGoods.length > 0) {            
+            this.filteredGoods.forEach(good => {
+                const goodsItem = new GoodsItem(good.id_product, good.product_name, good.price, good.img);
+                goodsList += goodsItem.render();
+            });            
+        } else { // список товаров пуст
+            goodsList += '<br />Не найдено товаров.<br /><br />';
+        }
         this.container.innerHTML = goodsList;
     }  
 }

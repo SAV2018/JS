@@ -13,8 +13,21 @@
     <body>
         <header>
             <h1><span class="initial">J</span>Shop</h1>
-            <button id="cart-button" onclick="document.location = 'index.html?cart'" title="0 ₽">Корзина (0)</button>
-            <div class="top-menu"><a href="index.html">Товары</a> <a onclick="makeXMLHttpRequest(`${API_URL}/catalogData.json`, callback)">XMLRequest</a> <a onclick="usePromise()">Promise</a> <a>...</a></div>            
+            
+            <button id="cart-button" onclick="document.location='index.html?cart'" title="0 ₽">Корзина (0)</button>
+            <div class="search-container">
+                <form id="search-form">
+                    <input type="text" id="search-pattern"/>
+                    <button id="search-button">Искать</button>
+                </form>
+            </div> 
+
+            <div class="top-menu"><a href="index.html">Товары</a> 
+            <a onclick="makeXMLHttpRequest(`${API_URL}/catalogData.json`, callback)">XMLRequest</a>
+            <a onclick="usePromise()">Promise</a>
+            <a onclick="replaceQuotes()" title="Замена одинарных кавычек в тексте на двойные">RegEx</a>
+            <a href="feedback.html" title="Форма обратной связи">Feedback</a> 
+            <a>...</a></div>            
         </header>
         
         <main>
