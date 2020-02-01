@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" type="text/css" href="normalize.css"/>
+        <link rel="stylesheet" type="text/css" href="main.css"/>
+        <title>eShop</title>
+    </head>
+    
+    <body>
+        <header>
+            <h1><span class="initial">J</span>Shop</h1>
+            <div class="top-menu"><a href="index.html">« На главную</a> 
+        </header>
+        
+        <style>
+            div.field { margin: 10px; }
+            div.field input {
+                border: 1px solid #aaa;
+                padding: 1px 5px;
+            }
+            div.field textarea {
+                padding: 1px 5px;
+            }
+            div#error {
+                color: #f00;
+                margin: 10px 20px;
+            }
+        </style>
+        
+        <main>
+            <fieldset>
+                <form id="feedback-form" onsubmit="return validate()">
+                    <div class="field"><input type="text" id="name" placeholder="Имя"/></div>
+                    <div class="field"><input type="text" id="phone" placeholder="Телефон"/>
+                    <span style="color:#aaa">+7(000)000-0000</span> </div>
+                    <div class="field"><input type="text" id="email" placeholder="e-mail"/></div>
+                    <div class="field"><textarea type="text" id="message" placeholder="текст сообщения" rows="5" cols="50"></textarea></div>
+                    <div class="field"><button id="send-button">Отправить</button></div>
+                </form>
+            </fieldset>
+        </main>
+        
+        <div class="footer">&copy; 2020 SAV</div>
+        <div id="error"></div>
+        <script src="feedback.js"></script>
+    </body>
+</html>
