@@ -11,31 +11,60 @@
     </head>
     
     <body>
-        <header>
-            <h1><span class="initial">J</span>Shop</h1>
+        <div id="app">
+            <header>
+                <h1><span class="initial">J</span>Shop</h1>
+                
+                <button id="cart-button" onclick="document.location='index.html?cart'; alert(isCartMode())" :title="sum().toLocaleString('ru-RU') +' ₽'" v-cloak>Корзина ({{ cartSize }})</button>
+                
+                <div class="search-container">
+                    <form id="search-form" v-on:submit.prevent="findGood">
+                        <input type="text" id="search-pattern" v-model="pattern"/>
+                        <button id="search-button">Искать</button>
+                    </form>
+                </div> 
+    
+                <div class="top-menu"><a href="index.html">Товары</a> 
+                <a>...</a></div>            
+            </header>
             
-            <button id="cart-button" onclick="document.location='index.html?cart'" title="0 ₽">Корзина (0)</button>
-            <div class="search-container">
-                <form id="search-form">
-                    <input type="text" id="search-pattern"/>
-                    <button id="search-button">Искать</button>
-                </form>
-            </div> 
+            <div class="goods-list" v-if="!isCartMode" v-cloak>
+                <div class="goods-item" v-for="good in filteredGoods" :key="good.id_product">
+                    <img :src="good.img ? good.img : 'https://via.placeholder.com/150'"
+                         :alt="good.product_name" :title="good.product_name">
+                    <h3>{{ good.product_name }}</h3>
+                    <p>Цена: <b>{{ good.price.toLocaleString('ru-RU') }} ₽</b></p>
+                    <button class="add-button" title="Добавить товар в корзину"
+                            @click="addGood(good.id_product)">Добавить</button>
+                </div>
+                <span v-if="emptyGoodsList" v-cloak><br />Не найдено товаров.<br /><br /></span>
+            </div>
+                
+            <div class="cart" v-if="isCartMode" v-cloak>
+                <h2>Корзина:</h2><hr />
+                <div class="cart-item" v-for="good in getCart" :key="good.id">
+                    <button class="cart-button" title="Увеличить кол-во товара в корзине"
+                            @click="addGood(good.id)">+</button>
+                    <button class="cart-button" title="Уменьшить кол-во товара в корзине"
+                            @click="decGood(good.id)">-</button>
+                    <button class="cart-button-red" title="Удалить товар из корзины"
+                            @click="removeGood(good.id)">х</button>
+                    <b>{{ good.name }}</b> - {{ good.n }} шт. * {{ good.price.toLocaleString('ru-RU') }} ₽ = {{ (good.price * good.n).toLocaleString('ru-RU') }}  ₽
+                </div>
+                <hr /><div class="cart-cost" v-cloak>Итого: {{ sum().toLocaleString('ru-RU') }} ₽</div>
+                
+                <span v-if="emptyCart" v-cloak><br />Не найдено товаров.<br /><br /></span>
+                <div>
+                    <a href="index.html" style="margin: 5px 0; font-weight:bold">« Вернуться к товарам</a>
+                </div>                
+            </div>
 
-            <div class="top-menu"><a href="index.html">Товары</a> 
-            <a onclick="makeXMLHttpRequest(`${API_URL}/catalogData.json`, callback)">XMLRequest</a>
-            <a onclick="usePromise()">Promise</a>
-            <a onclick="replaceQuotes()" title="Замена одинарных кавычек в тексте на двойные">RegEx</a>
-            <a href="feedback.html" title="Форма обратной связи">Feedback</a> 
-            <a>...</a></div>            
-        </header>
+            
+            <div class="footer">&copy; 2020 SAV</div>
+            <div id="msg-line"></div>
+        </div>
         
-        <main>
-            <div class="goods-list"></div>
-        </main>
-        
-        <div class="footer">&copy; 2020 SAV</div>
-        <div id="msg-line"></div>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
         <script src="main.js"></script>
     </body>
 </html>
