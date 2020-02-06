@@ -1,14 +1,123 @@
 const API_URL = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
 
+Vue.component('search-container', {
+    props: ['pattern'],
+    template:
+        `<div class="search-container">
+            <form id="search-form" @submit.prevent="findGood">
+                <input type="text" id="search-pattern" v-model.trim="pattern"/>
+                <button id="search-button">Искать</button>
+            </form>
+        </div>`,
+    methods: {
+        findGood() {
+            app.findGood(this.pattern);
+        }
+    }
+});
+
+Vue.component('goods-item', {
+    props: ['good'],
+    template:
+        `<div class="goods-item">
+            <img :src="good.img ? good.img : 'https://via.placeholder.com/150'"
+                 :alt="good.product_name" :title="good.product_name">
+            <h3>{{ good.product_name }}</h3>
+            <p>Цена: <b>{{ good.price.toLocaleString('ru-RU') }} ₽</b></p>
+            <button class="add-button" title="Добавить товар в корзину"
+                    @click="onClickAddGoodButton">Добавить</button>
+        </div>`,
+    methods: {
+        onClickAddGoodButton() {
+            app.addGood(this.good.id_product);
+        }
+    }    
+});
+
+Vue.component('goods-list', {
+    props: ['goods'],
+    computed: {   
+        isEmptyGoodsList() {
+            return !(this.goods.length > 0);
+        },
+    },
+    template:
+        `<div class="goods-list">
+            <div v-if="!isEmptyGoodsList">
+                <goods-item v-for="good in goods" :key="good.id_product" :good="good"></goods-item>
+            </div>
+            <div v-else><br />Не найдено товаров.<br /><br /></div>
+        </div>`
+});
+
+Vue.component('cart-item', {
+    props: ['good'],
+     template:
+        `<div class="cart-item">
+            <button class="cart-button" title="Увеличить кол-во товара в корзине"
+                    @click="addGood">+</button>
+            <button class="cart-button" title="Уменьшить кол-во товара в корзине"
+                    @click="decGood">-</button>
+            <button class="cart-button-red" title="Удалить товар из корзины"
+                    @click="removeGood">х</button>
+            <b>{{ good.name }}</b> - {{ good.n }} шт. * {{ good.price.toLocaleString('ru-RU') }} ₽ = {{ (good.price * good.n).toLocaleString('ru-RU') }}  ₽ 
+        </div>`,
+    methods: {
+        addGood() {
+            app.addGood(this.good.id);
+        },        
+        decGood() {
+            app.decGood(this.good.id);
+        },
+        removeGood() {
+            app.removeGood(this.good.id);
+        },        
+    }
+});
+  
+Vue.component('cart', {
+    props: ['goods', 'sum'],
+    computed: {
+        isEmptyCart() {
+            return !(this.goods.length > 0)
+        },
+    },
+    template:
+        `<div class="cart">
+            <h2>Корзина:</h2><hr />
+            <div v-if="!isEmptyCart">
+                <cart-item v-for="good in goods" :key="good.id" :good="good"></cart-item>
+             <hr /><div class="cart-cost">Итого: {{ sum }}</div>   
+            </div>
+            <div v-else><br />Не найдено товаров.<br /><br /></div><hr />
+            <div>
+                <a href="index.html" style="margin: 5px 0; font-weight:bold">« Вернуться к товарам</a>
+            </div>                
+        </div>`,
+    methods: {
+        getSum() {
+            app.getSum();
+        }
+    }
+});
+
 const app = new Vue({
     el: '#app',
     data: {
         cart: [],           // список товаров в корзине
         goods: [],          // список всех товаров
         filteredGoods: [],  // список вывода товаров
+        cartSum: 0,         // стоимость корзины
+        isMsgBox: false,    // признак вывода окна сообщения
+        msg: '',            // сообщение
+        timeoutId: null,    // код таймера
         pattern: ''         // шаблон поиска
     },
     computed: {
+        getSum() {
+            return `${this.cartSum.toLocaleString('ru-RU')} ₽`;
+        },
+        
         getImage(good) {
             if (!good.img) {
                 good.img = 'https://via.placeholder.com/150';
@@ -32,15 +141,7 @@ const app = new Vue({
                 goods[index].price = item.price;
                 goods[index].name = item.product_name;
             });
-            return goods;
-        },
-        
-        emptyGoodsList() {
-            return !(this.filteredGoods.length > 0);
-        },
-        
-        emptyCart() {
-            return !(this.cart.length > 0)
+            return goods;            
         }
     },
     methods: { 
@@ -81,11 +182,17 @@ const app = new Vue({
             try {
                 this.goods = await this.makeXHRequest(`${API_URL}/catalogData.json`)
                 this.filteredGoods = [...this.goods];
+                
+                // проверяем наличие корзины и если есть загружаем её
+                if (localStorage.getItem('cart') !== null) {            
+                    this.cart = JSON.parse(localStorage.getItem('cart'));
+                    this.sum();
+                }                
             } catch (e) {
                 console.error(e);
             }
         },
-                
+ 
         fetchGood(id) { // получение товара по id
             return this.goods.find(good => good.id_product === id);
         },
@@ -96,9 +203,8 @@ const app = new Vue({
                 this.cart.push({id: id, n: 1}); // добавляем товар в корзину
             } else { // товар уже есть в корзине
                 this.cart[index].n += 1; // увеличиваем кол-во товара на 1
-            }
-    
-            this.update();
+            }    
+            this.update(`В корзину добавлен товар: ${this.fetchGood(id).product_name} (${id}) - 1 шт.`);
         },
         
         decGood(id) { // уменьшение кол-ва товара в корзине
@@ -108,37 +214,52 @@ const app = new Vue({
                 if (this.cart[index].n === 0) { // если кол-во товара = 0
                     this.removeGood(id); // удаляем товар из корзины
                 }
-            }
-            
-            this.update();
+            }            
+            this.update(`Из корзины удалён товар: ${this.fetchGood(id).product_name} (${id}) - 1 шт.`);
         },
     
         removeGood(id) { // удаление товара из корзины
-            let index = this.cart.findIndex(good => good.id === id);
+            const index = this.cart.findIndex(good => good.id === id);
+            const n = this.cart[index].n;
             
             if (index >= 0) { // товар найден (товара в корзине)
                 this.cart.splice(index, 1); // удаляем товар
             }
-            
-            this.update();
+            this.update(`Из корзины удалён товар: ${this.fetchGood(id).product_name} (${id}) - ${n} шт.`);
         },
           
-        update() { // сохранение корзины
-            localStorage.setItem('cart', JSON.stringify(this.cart));   
+        update(msg = '') { // обновление корзины
+            // сохраняем состояние корзины
+            localStorage.setItem('cart', JSON.stringify(this.cart));
+            this.sum(); // пересчитываем стоимость корзины
+            this.showMsg(msg); // выводим сообщение
+        },
+        
+        showMsg(msg) {
+            if (msg === '') return;
+            
+            if (this.isMsgBox) {
+                this.msg += `<br />${msg}`;
+                clearTimeout(this.timeoutId); // сбрасываем таймаут
+                this.isMsgBox = false; // отключаем блок  
+            } else {
+                this.msg = msg;                          
+            }
+            
+            this.isMsgBox = true; // показываем блок
+            this.timeoutId = setTimeout(() => { this.isMsgBox = false; }, 4000);            
         },
     
         sum() { // подсчёт стоимости товаров в корзине
-            let sum = 0;
-            
             for (let item of this.cart) {
                 let good = this.fetchGood(item.id);
-                sum += item.n * good.price;
+                this.cartSum += item.n * good.price;
             }
-            return sum;
+            return this.cartSum;
         },
         
-        findGood() { // поиск товара
-            if (this.pattern !== '') this.filterGoods(this.pattern);
+        findGood(pattern) { // поиск товара
+            if (pattern !== '') this.filterGoods(pattern);
         },
         
         filterGoods(pattern) { // получение списка товаров по шаблону
@@ -146,13 +267,13 @@ const app = new Vue({
             this.filteredGoods = this.goods.filter((good) => {
                 return rex.test(good.product_name, pattern);                                  
             });
+        },
+        
+        intoCart() { // переход к просмотру корзины
+            document.location='index.html?cart';
         }
     },
     mounted() {
         this.fetchGoods();
-        
-        if (localStorage.getItem('cart') !== null) {
-            this.cart = JSON.parse(localStorage.getItem('cart'));
-        }
     }
 });
