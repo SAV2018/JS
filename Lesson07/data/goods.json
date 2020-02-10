@@ -1,0 +1,15 @@
+[
+    { "id_product":1, "product_name": "Товар 1", "price": 20000},
+    { "id_product":2, "product_name": "Товар 2", "price": 21500},
+    { "id_product":3, "product_name": "Товар 3", "price": 32000},
+    { "id_product":4, "product_name": "Товар 4", "price": 26000},
+    { "id_product":5, "product_name": "Товар 5", "price": 18000},
+    { "id_product":6, "product_name": "Товар 6", "price": 34500},
+    { "id_product":7, "product_name": "Товар 7", "price": 10000},
+    { "id_product":8, "product_name": "Товар 8", "price": 25000},
+    { "id_product":9, "product_name": "Товар 9", "price": 20000},
+    { "id_product":10, "product_name": "Товар 10", "price": 5500},
+    { "id_product":11, "product_name": "Товар 11", "price": 8000},
+    { "id_product": 123, "product_name": "Ноутбук", "price": 45600 },
+    { "id_product": 456, "product_name": "Мышка", "price": 1000 }
+]

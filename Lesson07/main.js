@@ -1,4 +1,4 @@
-const API_URL = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
+const API_URL ='http://localhost:3000/api';
 
 Vue.component('search-container', {
     props: ['pattern'],
@@ -145,7 +145,7 @@ const app = new Vue({
         }
     },
     methods: { 
-        makeXHRequest(url) {
+        makeXHRequest(url, http_method, body = null) {
             return new Promise((resolve, reject) => {
                 let xhr;
                 if (window.XMLHttpRequest) {
@@ -154,11 +154,13 @@ const app = new Vue({
                     xhr = new window.ActiveXObject("Microsoft.XMLHTTP");
                 }
                 
-                xhr.onreadystatechange = function() {            
+                xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4) {
-                        if (xhr.status === 200) {                    
+//alert(xhr.readyState + ' | ' + xhr.status + ' | '+ xhr.responseText);
+                        if (xhr.status === 200) {
                             resolve(JSON.parse(xhr.responseText)); 
                         } else {
+//alert(`http Ошибка: ${xhr.status} : ${xhr.statusText}`);
                             reject(xhr.responseText);
                         }
                     }
@@ -170,24 +172,29 @@ const app = new Vue({
                 }
                 
                 xhr.onerror = function (err) {
+//alert(`Ошибка соединения: ${xhr.status} : ${xhr.statusText}`);
                     reject(err);
                 };
-                
-                xhr.open('GET', url);
-                xhr.send();
+  
+                xhr.open(http_method, `${API_URL}${url}`);
+                if (http_method === 'POST') {
+                    //xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8;');
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                }
+//alert(http_method + url + body);
+                xhr.send(body);
             });
         },
  
         async fetchGoods() { // получение списка товаров
             try {
-                this.goods = await this.makeXHRequest(`${API_URL}/catalogData.json`)
+                this.goods = await this.makeXHRequest('/goods', 'GET')
                 this.filteredGoods = [...this.goods];
                 
-                // проверяем наличие корзины и если есть загружаем её
-                if (localStorage.getItem('cart') !== null) {            
-                    this.cart = JSON.parse(localStorage.getItem('cart'));
-                    this.sum();
-                }                
+                // загружаем с сервера корзину
+                this.cart = await this.makeXHRequest('/cart', 'GET');
+                this.cart = JSON.parse(localStorage.getItem('cart'));
+                this.sum();               
             } catch (e) {
                 console.error(e);
             }
@@ -199,11 +206,12 @@ const app = new Vue({
 
         addGood(id) { // добавление товара в корзину
             let index = this.cart.findIndex(good => good.id === id);
+
             if (index < 0) { // товар не найден (товара нет в корзине)
                 this.cart.push({id: id, n: 1}); // добавляем товар в корзину
             } else { // товар уже есть в корзине
                 this.cart[index].n += 1; // увеличиваем кол-во товара на 1
-            }    
+            }
             this.update(`В корзину добавлен товар: ${this.fetchGood(id).product_name} (${id}) - 1 шт.`);
         },
         
@@ -231,6 +239,7 @@ const app = new Vue({
         update(msg = '') { // обновление корзины
             // сохраняем состояние корзины
             localStorage.setItem('cart', JSON.stringify(this.cart));
+            this.makeXHRequest('/cart', 'POST', JSON.stringify(this.cart));
             this.sum(); // пересчитываем стоимость корзины
             this.showMsg(msg); // выводим сообщение
         },
