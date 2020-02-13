@@ -1,0 +1,29 @@
+{
+  "name": "jshop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+	"dev": "webpack-dev-server --mode development --open",
+    "build": "webpack --mode production"
+  },
+  "author": "SAV",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.8.4",
+    "babel-loader": "^8.0.6",
+    "body-parser": "^1.19.0",
+    "css-loader": "^3.4.2",
+    "express": "^4.17.1",
+    "jasmine": "^3.5.0",
+    "vue-loader": "^15.9.0",
+    "webpack": "^4.41.6"
+  },
+  "devDependencies": {
+    "vue-template-compiler": "^2.6.11",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  }
+}

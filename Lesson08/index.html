@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" type="text/css" href="normalize.css"/>
+        <link rel="stylesheet" type="text/css" href="main.css"/>
+        <title>eShop</title>
+    </head>
+    
+    <body>
+        <div id="app">
+            <header>
+                <h1><span class="initial">J</span>Shop</h1>
+                
+                <button id="cart-button" @click="intoCart" :title="getSum" v-cloak>Корзина ({{ cartSize }})</button>
+                <search :pattern="pattern" @find-good="findGood" v-cloak></search>
+    
+                <div class="top-menu"><a href="index.html">Товары</a> 
+                <a>...</a></div>          
+            </header>
+            
+            <goods :goods="filteredGoods" v-if="!isCartMode" @add-good="addGood" v-cloak></goods>
+            <cart :goods="getCart" :sum="getSum" v-else v-cloak></cart>
+            
+            <div class="footer">&copy; 2020 SAV</div>
+            <log :ismessage="isMsgBox" :msg="message" :islog="isVisibleLog" :log="log" v-cloak></log>      
+        </div>
+         
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="dist/jshop.js"></script>
+    </body>
+</html>
